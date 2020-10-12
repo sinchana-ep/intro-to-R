@@ -1,0 +1,399 @@
+---
+title: "Introduction to R"
+author: "Sinchana"
+date: "10/12/2020"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# include=FALSE parameter means this chunk will not be shown in the final output
+# echo=TRUE parameter is setting options so R code will be shown in the output throughout the document
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+
+Here are some additional resources on R and R Markdown:  
+- [Markdown cheatsheet](https://www.markdownguide.org/cheat-sheet/): general markdown syntax  
+- [R Markdown cheatsheet](https://rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf): specifically for R Markdown   
+- [Base R cheatsheet](https://rstudio.com/wp-content/uploads/2016/10/r-cheat-sheet-3.pdf): basic R syntax and functions  
+
+#### 1. Create a code chunk
+
+Try two ways to create a new code chunk (gray blocks where you can write in R code and comments):
+
+```{r}
+# You can insert a new code chunk by clicking the "Insert" button at the top-right of the Markdown document and choosing R from the dropdown menu, or by manually typing the three tick marks (```), r in curly brackets {r} and typing the 3 tick marks again a line or two later to end the code chunk
+```
+
+
+
+#### 2. Run a code chunk
+
+Try two ways to run this code chunk:
+```{r run_chunk}
+# You can run a code chunk by clicking the "Run" button at the top-right of the Markdown document and choosing an option from the dropdown menu, by clicking the green triangle in the top-right of an individual code block, or by highlighting a specific line of code and pressing Ctrl+Enter (PC) or Command+Enter (Mac) on your keyboard
+
+print("Hello world!")
+
+```
+
+
+
+#### 3. Sample script
+
+Explore the parts of the sample script below. What happens when you run `mean(y)` versus `mean(y, na.rm=TRUE)`?
+```{r sample_script}
+# This is a sample script in R
+x <- c(1, 2, 3) # assign variable x to vector '1 2 3'
+x  # print variable x
+mean(x) # calculate the mean of x
+
+y <- c(4, 5, 6, NA) # assign variable y to vector '4 5 6 NA'
+y
+mean(y) # calculate the mean of y
+mean(y, na.rm=TRUE) # calculate the mean of y, removing missing values first
+```
+__Answer__: When you run mean(y) the result is NA due to the missing value (also called a null value or NA value) in the vector assigned to the variable y (the vector being "4 5 6 NA"). R cannot perform mathematical calculations on missing values. When you add the argument "na.rm=TRUE", R will remove any missing values and calculate the mean using what remains, in this case the vector "4 5 6".
+
+
+#### 4. Install R Packages
+
+Use **install.packages("package name")** to install a new package. You only need to install a package once. In every script or RMarkdown where you want to use the functions in a package, you will need to load that package into the script. Use **library(package name)** to load a package.
+
+Now, install and load the *dplyr* package below:
+```{r install_dplyr}
+# install.packages("dplyr") (I have commented this command out because the dplyr package is already installed)
+library(dplyr)
+```
+
+
+#### 5. Bring up help documentation for functions and packages
+
+First, run the following ways to bring up help documentation for the functions, characters and packages named in the code block below. Then, try bringing up documentation for the functions, special characters and packages listed in green on the lecture slides:
+```{r get_help, eval=FALSE}
+# get help for this function: mean
+?mean
+help(mean)
+
+# get help for special characters, such as this one !
+?"!"
+help("!")
+
+# get help for an installed package, dplyr 
+help(package=dplyr)
+
+# show examples of a function called sum
+example(sum)
+```
+
+
+
+
+#### 6. Perform simple calculations in R
+
+What do all of the operators below do? Try running the code, or bringing up help documentation:
+```{r calculations}
+x <- 400
+y <- 60
+
+x+y
+x-y  
+x*y
+x/y
+x^y
+x%%y
+x%/%y
+```
+
+__Answers:__  
+
+Operator | Function
+---------|---------
++        | addition
+-        | subtraction
+*        | multiplication
+/        | division
+^        | exponent (power of)
+%%       | division, returns remainder only
+%/%      | division, returns quotient only (rounds down to nearest whole number)
+
+
+
+
+#### 7. Data types in R
+
+Find the data types of the variables listed on the lecture slides. Then find out how to convert a data type:
+```{r data_types}
+# find the data types
+class(2)
+class(4L)
+class(1+2i)
+class(TRUE)
+class("I love R!!")
+
+# convert numeric variables into characters
+a <- 1  # assigning a variable
+a
+class(a)
+a <- as.character(a)  # converting variable a from numeric to character
+a
+class(a)
+
+
+# convert characters into numeric variables
+b <- "1"
+class(b)
+b <- as.numeric(b)
+class(b)
+
+```
+
+
+__Bonus:__ Find the data types of the common data structures vectors and lists:
+```{r}
+# find the data type of a vector
+class(c(1,2,3))
+class(c(4,5,"six"))
+
+# find the data type of a list
+class(list(1,2,3))
+class(list(4,5,"six"))
+
+```
+__Note:__ For vectors, notice how R will consider all elements in a vector to be a single data type, even if it appears to us that the vector contains multiple data types. In contrast, lists are a separate data structure that will have the type **list** regardless of the individual elements inside the list.
+
+
+
+#### 8. Data structures in base R
+
+Create a dataframe in base R using the **mtcars** dataset. Assign this dataframe to the variable `cars`
+```{r create_cars}
+
+cars <- data.frame(mtcars)
+
+```
+
+
+Explore the `cars` dataframe in base R
+```{r explore_cars, eval=FALSE}
+
+str(cars)
+dim(cars)
+head(cars)
+head(cars, 10)
+tail(cars)
+tail(cars, 3)
+summary(cars)
+colMeans(cars, na.rm=TRUE) # note the "M" is capitalized
+View(cars) # note the V is capitalized
+is.na(cars)
+
+```
+
+
+
+#### 9. Subset a dataframe in base R
+
+Try running the below syntax to subset a dataframe in base R:
+```{r subset_cars, eval=FALSE}
+# select certain variables
+cars[4,6] # select the element in the 4th row and the 6th column
+cars[4,] # select the entire 4th row (note the comma at the end of the brackets)
+cars[,6] # select the entire 6th column (not the comma at the beginning of the brackets)
+
+# select an entire column/variable
+cars["mpg"]
+cars$mpg
+```
+
+__Comparison Operators:__
+
+Operator | Function
+---------|---------
+>        | greater than
+<        | less than
+>=       | greater than or equal to
+<=       | less than or equal to
+==       | equal to
+!=       | not equal to
+
+
+__Logical Operators:__  
+
+! = NOT   
+& = AND   
+| = OR   
+
+
+
+**Your turn! Select cars with:**
+(hint: use the subset() function)   
+
+9a. mpg greater than 15
+```{r select_mpg}
+
+subset(cars, mpg > 15)
+
+```
+
+
+9b. cyl equal to 4 or 8
+```{r select_cyl}
+
+subset(cars, cyl==4 | cyl==8)
+
+```
+**Note:** If you use subset(cars, cyl==4|8), you will get the original dataset
+
+9c. mpg greater than 15 **and** cyl equal to 4 or 8
+```{r select_mpg_cyl}
+
+subset(mtcars, mpg>15 & (cyl==4|cyl==8))
+
+```
+
+
+
+#### 10. Sort a dataframe in base R   
+
+Run the code below to bring up the help documentation for the **order** function and order `cars` miles per gallon:
+```{r order, eval=FALSE}
+?order
+
+order(cars$mpg)
+
+```
+What happens when you run `order(cars$mpg)`? What is the data type? Is this how you want to sort your dataframe?    
+
+__Answer:__  `cars$mpg` is selecting only the mpg column from the cars dataframe, as a vector (try running `class(cars$mpg)` and you'll see the data type is a numeric vector, not a dataframe). In this case, the **order** function is only sorting the selected vector, not the entire data frame.   
+
+
+
+10a. Sort the entire `cars` dataframe according to mpg in ascending order:
+```{r sort_mpg}
+
+cars[order(cars$mpg),]
+
+```
+
+
+10b. Sort the entire `cars` dataframe according to mpg in **descending** order:
+```{r sort_mpg_desc}
+
+cars[order(cars$mpg,decreasing=TRUE),]
+
+```
+
+
+10c. Sort the entire `cars` dataframe first by cyl, then by mpg, both in ascending order:
+```{r sort_cyl_mpg}
+
+cars[order(cars$cyl,cars$mpg),]
+
+```
+
+
+
+#### 11. Sort a dataframe using the *arrange* function in the *dplyr* package
+
+*(note: you must have the dplyr package installed before running this code chunk. If you have not previously installed dplyr, uncomment and run the first line of the below chunk to install it. The installation can take a few minutes)*  
+
+Do the same analysis as in the above section, but use the *arrange* function in the *dplyr* package instead of in base R.
+
+First, load the dplyr package, if you haven't already:
+```{r load_pkg}
+# install.packages("dplyr")
+library(dplyr)
+```
+
+
+11a. Sort the entire `cars` dataframe according to mpg in ascending order:
+```{r sort_mpg_dplyr}
+arrange(mtcars, mpg)
+
+```
+
+
+11b. Sort the entire `cars` dataframe according to mpg in **descending** order:
+```{r sort_mpg_desc_dplyr}
+arrange(mtcars, desc(mpg))
+
+```
+
+
+11c. Sort the entire `cars` dataframe first by cyl, then by mpg, both in ascending order:
+```{r sort_cyl_mpg_dplyr}
+arrange(mtcars, cyl, mpg)
+
+```
+
+
+
+#### 12. Your turn!
+
+12a. Create a dataframe using the **iris** dataset (a dataset built-in to R)
+```{r create_iris}
+iris <- data.frame(iris)
+```
+
+12b. Explore the dataset
+```{r explore_iris}
+# some examples:
+str(iris)
+head(iris)
+dim(iris)
+summary(iris)
+```
+
+12c. Order the dataframe by sepal length, in descending order
+
+```{r sort_iris}
+# Solution 1 - Use base R 
+iris[order(iris$Sepal.Length, decreasing = TRUE),]
+
+# Solution 2 - Use the arrange function in the dplyr package
+arrange(iris, desc(Sepal.Length))
+
+```
+
+12d. Select only "setosa" species and calculate the average sepal width, sepal length, petal width and petal length for this species [hint: use subset() and colMeans()]
+```{r subset_iris}
+# Solution 1 - calculate each column mean individually:
+setosa <- subset(iris, Species=="setosa")
+mean(setosa$Sepal.Length)
+mean(setosa$Sepal.Width)
+mean(setosa$Petal.Length)
+mean(setosa$Petal.Width)
+
+
+# Solution 2 - calculate column means all at once
+setosa <- subset(iris, Species=="setosa")
+colMeans(setosa[,1:4])
+
+
+# Solution 3 - follow the steps of Solution 2, in a single line of code
+colMeans(subset(iris, Species=="setosa")[,1:4])
+
+```
+
+
+__Bonus:__ Solution 4 using the pipe command from the **dplyr** package     
+*(note: you must have the dplyr package installed before running this code chunk. If you have not previously installed dplyr, uncomment and run the first line of the below chunk to install it. The installation can take a few minutes)*    
+
+```{r bonus_solution, eval=FALSE}
+# install.packages("dplyr")
+
+# If you have loaded the dplyr package in a previous line in this script, you don't have to do it again here. 
+library(dplyr)
+
+iris %>%
+  subset(Species=="setosa") %>%
+  select(-Species) %>%
+  colMeans()
+```
